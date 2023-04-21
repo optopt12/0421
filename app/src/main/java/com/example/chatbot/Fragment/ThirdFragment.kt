@@ -27,6 +27,7 @@ private val binding get() = _binding!!
 private lateinit var RAdapter: RestaurantListAdapter
 private var msglist: MutableList<data> = ArrayList()//建立可改變的list
 private lateinit var placeid :String
+private  var placeidArray: MutableList<String>  = ArrayList()
 private lateinit var name :String
 private lateinit var address :String
 private lateinit var phonenumber :String
@@ -90,18 +91,18 @@ class ThirdFragment : Fragment() {
                     response: Response<PlacesSearch>
                 ) {
                     response.body()?.let { res ->
-                        for(i in 0 until 3  )
-                        {
                             res.results.forEach { result ->
                                 placeid = result.place_id
-                                name = result.name ?: ""
+                                placeidArray.add(placeid)
                                 result.photos.forEach { photo ->
                                     photoref = photo.photo_reference
-
                                 }
                             }
-                            DetailSearch()
-                        }
+                    }
+                    for(i in 0 .. placeidArray.size - 1)
+                    {
+                        placeid = placeidArray[i]
+                        DetailSearch(placeid)
                     }
                 }
                 override fun onFailure(
@@ -114,7 +115,7 @@ class ThirdFragment : Fragment() {
             })
         }
     }
-    private fun DetailSearch(){
+    private fun DetailSearch(placeid :String){
         Apiclient.googlePlaces.getPlaceDetails(
             placeID = placeid,
             language = "zh-TW",
@@ -125,13 +126,42 @@ class ThirdFragment : Fragment() {
                 response: Response<PlacesDetails>
             ) {
                     response.body()?.let { res ->
-                        address= res.result.formatted_address ?: ""
-                        name = res.result.name ?: ""
-                        phonenumber = res.result.formatted_phone_number ?: ""
-                        CoroutineScope(Dispatchers.Main).launch {
+                            address= res.result.formatted_address ?: ""
+                            name = res.result.name ?: ""
+                            phonenumber = res.result.formatted_phone_number ?: ""
                             msglist.add(data(address,name,phonenumber))
                             RAdapter.notifyDataSetChanged()
-                        }
+
+                    }
+            }
+            override fun onFailure(
+                call: Call<PlacesDetails>,
+                t: Throwable
+            ) {
+                t.printStackTrace()
+                Method.logE(TAG, "onFailure: ${t.message}")
+            }
+        })
+    }
+    private fun Photo(){
+        Apiclient.googlePlaces.getPlacePhoto(
+            maxheight = "200",
+            maxwidth = "200",
+            photo_reference = photoref,
+            key = BuildConfig.GOOGLE_API_KEY
+        ).enqueue(object : Callback<PlacesDetails> {
+            override fun onResponse(
+                call: Call<PlacesDetails>,
+                response: Response<PlacesDetails>
+            ) {
+                response.body()?.let { res ->
+                    address= res.result.formatted_address ?: ""
+                    name = res.result.name ?: ""
+                    phonenumber = res.result.formatted_phone_number ?: ""
+                    CoroutineScope(Dispatchers.Main).launch {
+                        msglist.add(data(address,name,phonenumber))
+                        RAdapter.notifyDataSetChanged()
+                    }
                 }
             }
             override fun onFailure(

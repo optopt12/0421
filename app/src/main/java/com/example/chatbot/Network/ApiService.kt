@@ -94,8 +94,8 @@ interface ApiService {
     @Headers("Accept-Encoding: identity")
     @GET("details/json")
     fun getPlacePhoto(
-        @Query("height") height: String,
-        @Query("html_attributions") html_attributions: Array<String> ,
+        @Query("maxheight") maxheight: String,
+        @Query("maxwidth") maxwidth: String,
         @Query("photo_reference") photo_reference: String ,
         @Query("key") key: String
     ): Call<com.example.chatbot.placesDetails.PlacesDetails>
