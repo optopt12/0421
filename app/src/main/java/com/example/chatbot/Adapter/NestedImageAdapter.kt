@@ -7,7 +7,7 @@ import com.example.chatbot.databinding.ShopItemNestedBinding
 import com.example.chatbot.placesDetails.data
 import com.squareup.picasso.Picasso
 
-class NestedImageAdapter(var MsgList: MutableList<data>) :  //只需要MsgList的imgUrl
+class NestedImageAdapter(var photoList: List<NestedData>) :  //只需要MsgList的imgUrl
     RecyclerView.Adapter<NestedImageAdapter.ItemViewHolder>() {
 
     inner class ItemViewHolder(val binding: ShopItemNestedBinding) :
@@ -20,11 +20,11 @@ class NestedImageAdapter(var MsgList: MutableList<data>) :  //只需要MsgList�
 
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val data = MsgList[position]
-        Picasso.get().load(data.imageUrl).into(holder.binding.imgNested)
+        val photoUrl  = photoList[position].imageUrl
+        Picasso.get().load(photoUrl).into(holder.binding.imgNested)
     }
 
-    override fun getItemCount(): Int = MsgList.size
+    override fun getItemCount(): Int = photoList.size
 
 }
 

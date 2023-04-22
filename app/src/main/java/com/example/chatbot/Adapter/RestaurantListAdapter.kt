@@ -29,7 +29,7 @@ class RestaurantListAdapter(var MsgList: MutableList<data>) :
 
         val layoutManager = LinearLayoutManager(holder.binding.root.context, LinearLayoutManager.HORIZONTAL, false)
         holder.binding.rv.layoutManager = layoutManager
-        val nestedAdapter = NestedImageAdapter(MsgList)
+        val nestedAdapter = NestedImageAdapter(data.photoList)
         holder.binding.rv.adapter = nestedAdapter
 
     }
