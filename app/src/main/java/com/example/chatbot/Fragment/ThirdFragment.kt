@@ -1,6 +1,7 @@
 package com.example.chatbot.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,16 +23,18 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private var _binding : MapShopBinding? = null
+private var _binding: MapShopBinding? = null
 private val binding get() = _binding!!
 private lateinit var RAdapter: RestaurantListAdapter
 private var msglist: MutableList<data> = ArrayList()//建立可改變的list
-private lateinit var placeid :String
-private  var placeidArray: MutableList<String>  = ArrayList()
-private lateinit var name :String
-private lateinit var address :String
-private lateinit var phonenumber :String
-private lateinit var photoref :String
+private lateinit var placeid: String
+private var placeidArray: MutableList<String> = ArrayList()
+private lateinit var imageUrl: String
+private lateinit var name: String
+private lateinit var address: String
+private lateinit var phonenumber: String
+private lateinit var photoref: String
+
 class ThirdFragment : Fragment() {
     companion object {
         private const val TAG = "ThirdFragment"
@@ -39,11 +42,12 @@ class ThirdFragment : Fragment() {
         private const val DEFAULT_LATITUDE = 25.043871531367014
         private const val DEFAULT_LONGITUDE = 121.53453374432904
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = MapShopBinding.inflate(inflater,container,false)
+        _binding = MapShopBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -56,7 +60,7 @@ class ThirdFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRv() //RecyclerView初始化
-        SearchShop()
+        DetailSearch()
     }
 
     private fun initRv() {
@@ -70,107 +74,28 @@ class ThirdFragment : Fragment() {
             adapter = RAdapter
         }
     }
-    private fun SearchShop() {
-        val search = binding.editText.text.toString()
-        binding.button.setOnClickListener()
-        {
-//                val manager = requireActivity().supportFragmentManager.beginTransaction()
-//                manager.add(R.id.map, ShopFragment())
-//                    .addToBackStack(null)//在map新增一個叫做ShopFragment的Fragment
-//                manager.hide(PlacesFragment())//把map原本的PlacesFragment hide
-//                manager.show(ShopFragment()).commit()
-            Apiclient.googlePlaces.getPlaceSearch(
-                location = "$DEFAULT_LATITUDE,$DEFAULT_LONGITUDE",
-                radius = "500",
-                language = "zh-TW",
-                keyword = search,
-                key = BuildConfig.GOOGLE_API_KEY
-            ).enqueue(object : Callback<PlacesSearch> {
-                override fun onResponse(
-                    call: Call<PlacesSearch>,
-                    response: Response<PlacesSearch>
-                ) {
-                    response.body()?.let { res ->
-                            res.results.forEach { result ->
-                                placeid = result.place_id
-                                placeidArray.add(placeid)
-                                result.photos.forEach { photo ->
-                                    photoref = photo.photo_reference
-                                }
-                            }
-                    }
-                    for(i in 0 .. placeidArray.size - 1)
-                    {
-                        placeid = placeidArray[i]
-                        DetailSearch(placeid)
-                    }
-                }
-                override fun onFailure(
-                    call: Call<PlacesSearch>,
-                    t: Throwable
-                ) {
-                    t.printStackTrace()
-                    Method.logE(TAG, "onFailure: ${t.message}")
-                }
-            })
-        }
-    }
-    private fun DetailSearch(placeid :String){
-        Apiclient.googlePlaces.getPlaceDetails(
-            placeID = placeid,
-            language = "zh-TW",
-            key = BuildConfig.GOOGLE_API_KEY
-        ).enqueue(object : Callback<PlacesDetails> {
-            override fun onResponse(
-                call: Call<PlacesDetails>,
-                response: Response<PlacesDetails>
-            ) {
-                    response.body()?.let { res ->
-                            address= res.result.formatted_address ?: ""
-                            name = res.result.name ?: ""
-                            phonenumber = res.result.formatted_phone_number ?: ""
-                            msglist.add(data(address,name,phonenumber))
-                            RAdapter.notifyDataSetChanged()
 
-                    }
-            }
-            override fun onFailure(
-                call: Call<PlacesDetails>,
-                t: Throwable
-            ) {
-                t.printStackTrace()
-                Method.logE(TAG, "onFailure: ${t.message}")
-            }
-        })
-    }
-    private fun Photo(){
-        Apiclient.googlePlaces.getPlacePhoto(
-            maxheight = "200",
-            maxwidth = "200",
-            photo_reference = photoref,
-            key = BuildConfig.GOOGLE_API_KEY
-        ).enqueue(object : Callback<PlacesDetails> {
-            override fun onResponse(
-                call: Call<PlacesDetails>,
-                response: Response<PlacesDetails>
-            ) {
-                response.body()?.let { res ->
-                    address= res.result.formatted_address ?: ""
-                    name = res.result.name ?: ""
-                    phonenumber = res.result.formatted_phone_number ?: ""
-                    CoroutineScope(Dispatchers.Main).launch {
-                        msglist.add(data(address,name,phonenumber))
-                        RAdapter.notifyDataSetChanged()
-                    }
-                }
-            }
-            override fun onFailure(
-                call: Call<PlacesDetails>,
-                t: Throwable
-            ) {
-                t.printStackTrace()
-                Method.logE(TAG, "onFailure: ${t.message}")
-            }
-        })
+    private fun DetailSearch() {
+        imageUrl="https://www.edamam.com/food-img/296/296ff2b02ef3822928c3c923e22c7d19.jpg"
+        address = "test1address"
+        name = "test1name"
+        phonenumber = "test1phonenumber"
+        msglist.add(data(imageUrl,address, name, phonenumber))
+
+        imageUrl="https://www.edamam.com/food-img/515/515af390107678fce1533a31ee4cc35b.jpeg"
+        address = "test2address"
+        name = "test2name"
+        phonenumber = "test2phonenumber"
+        msglist.add(data(imageUrl,address, name, phonenumber))
+
+        imageUrl="https://www.edamam.com/food-img/42c/42c006401027d35add93113548eeaae6.jpg"
+        address = "test3address"
+        name = "test3name"
+        phonenumber = "test3phonenumber"
+        msglist.add(data(imageUrl,address, name, phonenumber))
+
+        Log.d("msg", "msglist: $msglist")
+        RAdapter.notifyDataSetChanged()
+
     }
 }

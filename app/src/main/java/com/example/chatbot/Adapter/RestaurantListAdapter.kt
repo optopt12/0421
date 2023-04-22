@@ -2,9 +2,11 @@ package com.example.chatbot.Adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chatbot.databinding.*
 import com.example.chatbot.placesDetails.data
+import com.squareup.picasso.Picasso
 
 class RestaurantListAdapter(var MsgList: MutableList<data>) :
     RecyclerView.Adapter<RestaurantListAdapter.ItemViewHolder>() {
@@ -20,9 +22,15 @@ class RestaurantListAdapter(var MsgList: MutableList<data>) :
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val data = MsgList[position]
+//        Picasso.get().load(data.imageUrl).into(holder.binding.img)
         holder.binding.Address.text = data.formatted_address
         holder.binding.Shopname.text = data.name
         holder.binding.PhoneNumber.text = data.formatted_phone_number
+
+        val layoutManager = LinearLayoutManager(holder.binding.root.context, LinearLayoutManager.HORIZONTAL, false)
+        holder.binding.rv.layoutManager = layoutManager
+        val nestedAdapter = NestedImageAdapter(MsgList)
+        holder.binding.rv.adapter = nestedAdapter
 
     }
 
