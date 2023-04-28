@@ -1,12 +1,23 @@
 package com.example.chatbot.Adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
+import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator
 import com.example.chatbot.databinding.*
 import com.example.chatbot.placesDetails.data
 import com.squareup.picasso.Picasso
+
+private lateinit var animator: ViewsTransitionAnimator<Int>
+private lateinit var list: RecyclerView
+private lateinit var pager: ViewPager
+private lateinit var background: View
+
+private lateinit var pagerAdapter: PagerAdapter
 
 class RestaurantListAdapter(var MsgList: MutableList<data>) :
     RecyclerView.Adapter<RestaurantListAdapter.ItemViewHolder>() {
@@ -36,3 +47,5 @@ class RestaurantListAdapter(var MsgList: MutableList<data>) :
 
     override fun getItemCount(): Int = MsgList.size
 }
+// TODO:Activity transition
+

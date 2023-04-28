@@ -6,12 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
+import com.alexvasilkov.gestures.transition.GestureTransitions
+import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator
+import com.alexvasilkov.gestures.transition.tracker.SimpleTracker
 import com.example.chatbot.Adapter.NestedData
 import com.example.chatbot.Adapter.RestaurantListAdapter
 import com.example.chatbot.BuildConfig
 import com.example.chatbot.Method
 import com.example.chatbot.Network.Apiclient
+import com.example.chatbot.R
 import com.example.chatbot.databinding.MapShopBinding
 import com.example.chatbot.placesDetails.PlacesDetails
 import com.example.chatbot.placesDetails.data
@@ -35,6 +43,7 @@ private lateinit var name: String
 private lateinit var address: String
 private lateinit var phonenumber: String
 private lateinit var photoref: String
+
 
 class ThirdFragment : Fragment() {
     companion object {
@@ -61,7 +70,9 @@ class ThirdFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRv() //RecyclerView初始化
-        DetailSearch()
+        testrv()
+
+
     }
 
     private fun initRv() {
@@ -76,7 +87,9 @@ class ThirdFragment : Fragment() {
         }
     }
 
-    private fun DetailSearch() {
+    private fun testrv() {
+
+
         var imageUrl = "https://www.edamam.com/food-img/296/296ff2b02ef3822928c3c923e22c7d19.jpg"
         var imageUrl2 = "https://www.edamam.com/food-img/515/515af390107678fce1533a31ee4cc35b.jpeg"
         var imageUrl3 = "https://www.edamam.com/food-img/42c/42c006401027d35add93113548eeaae6.jpg"
@@ -131,6 +144,9 @@ class ThirdFragment : Fragment() {
 
         Log.d("msg", "msglist: $msglist")
         RAdapter.notifyDataSetChanged()
+
+
     }
+
 
 }
