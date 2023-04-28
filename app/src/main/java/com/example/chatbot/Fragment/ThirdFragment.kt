@@ -27,11 +27,12 @@ private val binding get() = _binding!!
 private lateinit var RAdapter: RestaurantListAdapter
 private var msglist: MutableList<data> = ArrayList()//建立可改變的list
 private lateinit var placeid :String
-private  var placeidArray: MutableList<String>  = ArrayList()
+private var placeidArray: MutableList<String>  = ArrayList()
 private lateinit var name :String
 private lateinit var address :String
 private lateinit var phonenumber :String
 private lateinit var photoref :String
+private var photorefArray: MutableList<String>  = ArrayList()
 class ThirdFragment : Fragment() {
     companion object {
         private const val TAG = "ThirdFragment"
@@ -75,7 +76,7 @@ class ThirdFragment : Fragment() {
         binding.button.setOnClickListener()
         {
 //                val manager = requireActivity().supportFragmentManager.beginTransaction()
-//                manager.add(R.id.map, ShopFragment())
+//                manager.add(R.id.map,ShopFragment())
 //                    .addToBackStack(null)//在map新增一個叫做ShopFragment的Fragment
 //                manager.hide(PlacesFragment())//把map原本的PlacesFragment hide
 //                manager.show(ShopFragment()).commit()
@@ -95,14 +96,19 @@ class ThirdFragment : Fragment() {
                                 placeid = result.place_id
                                 placeidArray.add(placeid)
                                 result.photos.forEach { photo ->
-                                    photoref = photo.photo_reference
+                                    photoref = photo.photo_reference ?:""
+                                    photorefArray.add(photoref)
                                 }
                             }
+                    }
+                    for(i in 0 .. photorefArray.size - 1)
+                    {
+                        phonenumber = photorefArray[i]
+                        Photo(photoref)
                     }
                     for(i in 0 .. placeidArray.size - 1)
                     {
                         placeid = placeidArray[i]
-                        DetailSearch(placeid)
                     }
                 }
                 override fun onFailure(
@@ -143,10 +149,8 @@ class ThirdFragment : Fragment() {
             }
         })
     }
-    private fun Photo(){
+    private fun Photo(photoref:String){
         Apiclient.googlePlaces.getPlacePhoto(
-            maxheight = "200",
-            maxwidth = "200",
             photo_reference = photoref,
             key = BuildConfig.GOOGLE_API_KEY
         ).enqueue(object : Callback<PlacesDetails> {
@@ -155,13 +159,7 @@ class ThirdFragment : Fragment() {
                 response: Response<PlacesDetails>
             ) {
                 response.body()?.let { res ->
-                    address= res.result.formatted_address ?: ""
-                    name = res.result.name ?: ""
-                    phonenumber = res.result.formatted_phone_number ?: ""
-                    CoroutineScope(Dispatchers.Main).launch {
-                        msglist.add(data(address,name,phonenumber))
-                        RAdapter.notifyDataSetChanged()
-                    }
+
                 }
             }
             override fun onFailure(
