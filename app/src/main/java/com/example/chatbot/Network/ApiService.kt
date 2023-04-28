@@ -92,7 +92,7 @@ interface ApiService {
      * Google Places Photo
      */
     @Headers("Accept-Encoding: identity")
-    @GET("photo/json")
+    @GET("photo")
     fun getPlacePhoto(
         @Query("photo_reference") photo_reference: String ,
         @Query("key") key: String
