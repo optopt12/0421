@@ -2,6 +2,7 @@ package com.example.chatbot.Activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.FragmentManager
 import com.example.chatbot.Adapter.ViewPagerAdapter
 import com.example.chatbot.R
 import com.google.android.material.tabs.TabLayoutMediator

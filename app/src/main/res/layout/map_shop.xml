@@ -6,54 +6,63 @@
     android:layout_height="match_parent"
     tools:context=".Activity.MainActivity">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv"
-            android:layout_width="match_parent"
-            android:layout_height="700dp"
-            android:layout_weight="1"
-            android:layout_marginTop="5dp"
-            android:background="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/editText"
-            app:layout_constraintStart_toStartOf="parent"/>
-        <EditText
-            android:id="@+id/editText"
-            style="@style/Widget.AppCompat.AutoCompleteTextView"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="12dp"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:background="@color/quantum_grey400"
-            android:layout_gravity="center"
-            android:hint="在這裡搜尋"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:maxLines="1" />
-        <Button
-            android:id="@+id/button"
-            android:layout_marginStart="25dp"
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:text="搜尋"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:textColor="#42D363"
-            android:background="@color/quantum_grey200"
-            app:layout_constraintTop_toTopOf="@id/editText"
-            app:layout_constraintStart_toEndOf="@id/editText" />
+    <FrameLayout
+        android:id="@+id/fg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:id="@+id/recycler_full_background"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/window_background"
-            android:visibility="invisible" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="700dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editText" />
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/recycler_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <EditText
+        android:id="@+id/editText"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="1"
+        android:background="@color/quantum_grey400"
+        android:hint="在這裡搜尋"
+        android:maxLines="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/button"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="25dp"
+        android:background="@color/quantum_grey200"
+        android:text="搜尋"
+        android:textColor="#42D363"
+        app:layout_constraintStart_toEndOf="@id/editText"
+        app:layout_constraintTop_toTopOf="@id/editText" />
 
+    <View
+        android:id="@+id/recycler_full_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/window_background"
+        android:visibility="invisible" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/recycler_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".Activity.MainActivity">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Detailrv"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:background="@color/quantum_grey200"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor ="@color/white"
+            app:tabIndicatorHeight="3dp" />
+
+</LinearLayout>

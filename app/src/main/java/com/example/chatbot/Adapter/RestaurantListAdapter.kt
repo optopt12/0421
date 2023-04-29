@@ -8,18 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator
+import com.example.chatbot.Activity.MainActivity
 import com.example.chatbot.Fragment.PlacesFragment
+import com.example.chatbot.Fragment.RestaurantDetailFragment
+import com.example.chatbot.Fragment.ThirdFragment
 import com.example.chatbot.R
 import com.example.chatbot.databinding.*
 import com.example.chatbot.placesDetails.data
 import com.squareup.picasso.Picasso
-
-private lateinit var animator: ViewsTransitionAnimator<Int>
-private lateinit var list: RecyclerView
-private lateinit var pager: ViewPager
-private lateinit var background: View
-
-private lateinit var pagerAdapter: PagerAdapter
 
 class RestaurantListAdapter(var MsgList: MutableList<data>) :
     RecyclerView.Adapter<RestaurantListAdapter.ItemViewHolder>() {
@@ -27,6 +23,8 @@ class RestaurantListAdapter(var MsgList: MutableList<data>) :
      * 設定資料
      */
     inner class ItemViewHolder(val binding: ShopItemBinding) : RecyclerView.ViewHolder(binding.root)
+
+    var onClick: ((data) -> Unit) = {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val View = ShopItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -42,11 +40,8 @@ class RestaurantListAdapter(var MsgList: MutableList<data>) :
         Picasso.get().load(data.image).into(holder.binding.imageView)
         holder.binding.imageView.setOnClickListener()
         {
-            val manager = requireActivity().supportFragmentManager.beginTransaction()
-            manager.add(R.id.map,ShopFragment())
-                .addToBackStack(null)//在map新增一個叫做ShopFragment的Fragment
-            manager.hide(PlacesFragment())//把map原本的PlacesFragment hide
-            manager.show(ShopFragment()).commit()
+            onClick.invoke(data)
+
         }
         val layoutManager = LinearLayoutManager(holder.binding.root.context, LinearLayoutManager.HORIZONTAL, false)
 //        holder.binding.rv.layoutManager = layoutManager
