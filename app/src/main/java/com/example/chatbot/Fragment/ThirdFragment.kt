@@ -16,30 +16,47 @@ import com.example.chatbot.Network.Apiclient
 import com.example.chatbot.R
 import com.example.chatbot.databinding.MapShopBinding
 import com.example.chatbot.placesDetails.PlacesDetails
+import com.example.chatbot.placesDetails.Review
 import com.example.chatbot.placesDetails.data
 import com.example.chatbot.placesSearch.PlacesSearch
+import kotlinx.android.synthetic.main.shop_detail_item.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-private var _binding: MapShopBinding? = null
-private val binding get() = _binding!!
-private lateinit var RAdapter: RestaurantListAdapter
-private var msglist: MutableList<data> = ArrayList()//建立可改變的list
-private var photorefArray: MutableList<String>  = ArrayList()
-private lateinit var placeid: String
-private var placeidArray: MutableList<String> = ArrayList()
-private lateinit var image: String
-private lateinit var imageUrl: String
-private var nestedDataList: MutableList<NestedData> = ArrayList()
-private lateinit var name: String
-private lateinit var address: String
-private lateinit var phonenumber: String
-private lateinit var photoref: String
-
-
 class ThirdFragment : Fragment() {
+    //binding
+    private var _binding: MapShopBinding? = null
+    private val binding get() = _binding!!
+    //adapter
+    private lateinit var RAdapter: RestaurantListAdapter
+    //Rv
+    private var msglist: MutableList<data> = ArrayList()//建立可改變的list
+    //Google places search
+    private var photorefArray: MutableList<String>  = ArrayList()
+    private var placeidArray: MutableList<String> = ArrayList()
+    private var nestedDataList: MutableList<NestedData> = ArrayList()
+    private lateinit var placeid: String
+    private lateinit var image: String
+    private lateinit var photoref: String
+    //Google Detail search
+    private var photoList: MutableList<String> = ArrayList()
+    private var DetailphotorefArray: MutableList<String>  = ArrayList()
+    private lateinit var reviews: List<Review>
+    private lateinit var Detailphoto: String
+    private lateinit var Detailphotoref: String
+    private lateinit var Detailimage: String
+    private lateinit var name: String
+    private lateinit var phonenumber: String
+    private lateinit var address: String
+    //Google places search 評論
+    private lateinit var author_name: String
+    private lateinit var user_language: String
+    private lateinit var profile_photo_url: String
+    private lateinit var text: String
+    private lateinit var reference: String
+    private var rating: Int = 0
     companion object {
         private const val TAG = "ThirdFragment"
         private const val DEFAULT_ZOOM = 18F
@@ -70,12 +87,12 @@ class ThirdFragment : Fragment() {
 
     private fun initRv() {
         binding.rv.apply {
-            RAdapter = RestaurantListAdapter(msglist)//建立适配器实例
+            RAdapter = RestaurantListAdapter(msglist)
             layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.VERTICAL,
                 false
-            )  //布局为线性垂直
+            )
             adapter = RAdapter
             RAdapter.onClick = { data ->
                 val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
@@ -156,10 +173,32 @@ class ThirdFragment : Fragment() {
                 response: Response<PlacesDetails>
             ) {
                     response.body()?.let { res ->
-                            address= res.result.formatted_address ?: ""
-                            name = res.result.name ?: ""
-                            phonenumber = res.result.formatted_phone_number ?: ""
+                        address= res.result.formatted_address ?: ""
+                        name = res.result.name ?: ""
+                        phonenumber = res.result.formatted_phone_number ?: ""
+                        reference = res.result.reference
+                        res.result.photos.forEach{ photo ->
+                                DetailphotorefArray.add(photo.photo_reference)
+                        }
+                        res.result.reviews.forEach{ Review ->
+                            author_name = Review.author_name
+                            user_language = Review.language
+                            rating = Review.rating
+                            text = Review.text
+                            profile_photo_url = Review.profile_photo_url
+                        }
                     }
+
+                for(i in 0 .. DetailphotorefArray.size - 1)
+                {
+                    Detailphotoref = DetailphotorefArray[i]
+                    Detailimage ="https://maps.googleapis.com/maps/api/place/photo" +
+                            "?maxwidth=300" +
+                            "&maxheight=200" +
+                            "&photo_reference=" + Detailphotoref +
+                            "&key=" + BuildConfig.GOOGLE_API_KEY
+                    photoList.add(Detailimage)
+                }
                 rv(image)
             }
             override fun onFailure(
@@ -176,7 +215,14 @@ class ThirdFragment : Fragment() {
             formatted_address = address,
             name = name,
             formatted_phone_number = phonenumber,
-            image = image
+            image = image,
+            photoList = photoList, //photolist是單一店家的所有圖片
+            reference = reference,
+            author_name = author_name,
+            language = user_language,
+            rating = rating,
+            text = text,
+            profile_photo_url = profile_photo_url
             ))
 //        Log.d("msg", "msglist: $msglist\n")
 //        Log.d("nestedDataList", "nestedDataList: $nestedDataList\n")
