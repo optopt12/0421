@@ -202,26 +202,6 @@ class ThirdFragment : Fragment() {
 
     }
 
-    private fun testuniformimage(image: String): String {
-        val width = 300 // 设置目标宽度
-        val height = 200 // 设置目标高度
-        val resizedImages = mutableListOf<Bitmap>()
-
-        val input = URL(image).openStream() // 从 URL 中读取图片数据流
-        val bitmap = BitmapFactory.decodeStream(input) // 解码图片数据流为 Bitmap 对象
-        val resizedBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false) // 缩放 Bitmap 对象
-
-        resizedImages.add(resizedBitmap) // 将缩放后的 Bitmap 对象添加到列表中
-
-        val stream = ByteArrayOutputStream()
-        resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        val byteArray = stream.toByteArray()
-
-        val encodedString = Base64.encodeToString(byteArray, Base64.DEFAULT)
-        return encodedString
-
-
-    }
 
 }
 
