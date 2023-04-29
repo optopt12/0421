@@ -69,7 +69,7 @@ class ThirdFragment : Fragment() {
     }
 
     private fun initRv() {
-        binding.shoprv.apply {
+        binding.rv.apply {
             RAdapter = RestaurantListAdapter(msglist)//建立适配器实例
             layoutManager = LinearLayoutManager(
                 requireContext(),
