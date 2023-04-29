@@ -38,17 +38,16 @@ class Third_imageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var data: String? =null
+
         arguments?.let {
-//            val photoUrl = it.getString(ARG_PHOTO_URL)
-//            val someOtherData = it.getString(ARG_SOME_OTHER_DATA)
-            data = it.getString("data_key")
+            val photoUrl = it.getString(ARG_PHOTO_URL)
+            val someOtherData = it.getString(ARG_SOME_OTHER_DATA)
             // 取得傳遞過來的資料後，就可以使用它們了
         }
-//        Log.d("photoUrl", photoUrl.toString())
-//        val data = arguments?.getString("data_key")
-//        Log.d("data", data.toString())
-        Log.d("test", data.toString())
+        Log.d("photoUrl", photoUrl.toString())
+        val data = arguments?.getString("data_key")
+        Log.d("data", data.toString())
+
 
 
     }

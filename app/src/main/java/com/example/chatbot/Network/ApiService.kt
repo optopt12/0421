@@ -92,10 +92,8 @@ interface ApiService {
      * Google Places Photo
      */
     @Headers("Accept-Encoding: identity")
-    @GET("details/json")
+    @GET("photo")
     fun getPlacePhoto(
-        @Query("maxheight") maxheight: String,
-        @Query("maxwidth") maxwidth: String,
         @Query("photo_reference") photo_reference: String ,
         @Query("key") key: String
     ): Call<com.example.chatbot.placesDetails.PlacesDetails>

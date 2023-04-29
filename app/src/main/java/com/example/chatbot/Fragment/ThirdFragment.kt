@@ -1,19 +1,13 @@
 package com.example.chatbot.Fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.PagerAdapter
-import androidx.viewpager.widget.ViewPager
-import com.alexvasilkov.gestures.transition.GestureTransitions
-import com.alexvasilkov.gestures.transition.ViewsTransitionAnimator
-import com.alexvasilkov.gestures.transition.tracker.SimpleTracker
 import com.example.chatbot.Adapter.NestedData
 import com.example.chatbot.Adapter.RestaurantListAdapter
 import com.example.chatbot.BuildConfig
@@ -23,22 +17,22 @@ import com.example.chatbot.R
 import com.example.chatbot.databinding.MapShopBinding
 import com.example.chatbot.placesDetails.PlacesDetails
 import com.example.chatbot.placesDetails.data
-import com.example.chatbot.placesSearch.Photo
 import com.example.chatbot.placesSearch.PlacesSearch
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 private var _binding: MapShopBinding? = null
 private val binding get() = _binding!!
 private lateinit var RAdapter: RestaurantListAdapter
 private var msglist: MutableList<data> = ArrayList()//建立可改變的list
+private var photorefArray: MutableList<String>  = ArrayList()
 private lateinit var placeid: String
 private var placeidArray: MutableList<String> = ArrayList()
+private lateinit var image: String
 private lateinit var imageUrl: String
+private var nestedDataList: MutableList<NestedData> = ArrayList()
 private lateinit var name: String
 private lateinit var address: String
 private lateinit var phonenumber: String
@@ -70,8 +64,7 @@ class ThirdFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRv() //RecyclerView初始化
-        testrv()
-
+        SearchShop()
 
     }
 
@@ -84,69 +77,116 @@ class ThirdFragment : Fragment() {
                 false
             )  //布局为线性垂直
             adapter = RAdapter
+            RAdapter.onClick = { data ->
+                val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+                val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+
+                val b = Bundle()
+                b.putParcelable("Data", data)
+
+                val fragment = RestaurantDetailFragment()
+                fragment.arguments = b
+                fragmentTransaction.add(R.id.container, fragment, fragment.javaClass.name)
+                fragmentTransaction.addToBackStack(fragment.javaClass.name)
+                fragmentTransaction.commit()
+            }
         }
     }
+    private fun SearchShop() {
+        val search = binding.editText.text.toString()
+        binding.button.setOnClickListener()
+        {
 
-    private fun testrv() {
-
-
-        var imageUrl = "https://www.edamam.com/food-img/296/296ff2b02ef3822928c3c923e22c7d19.jpg"
-        var imageUrl2 = "https://www.edamam.com/food-img/515/515af390107678fce1533a31ee4cc35b.jpeg"
-        var imageUrl3 = "https://www.edamam.com/food-img/42c/42c006401027d35add93113548eeaae6.jpg"
-
-        var address = "test1address"
-        var name = "test1name"
-        var phonenumber = "test1phonenumber"
-        var nestedDataList = mutableListOf(NestedData(imageUrl))
-        nestedDataList.add(NestedData(imageUrl2))
-        nestedDataList.add(NestedData(imageUrl3))
-
-
-
-        msglist.add(
-            data(
-                formatted_address = address,
-                name = name,
-                formatted_phone_number = phonenumber,
-                photoList = nestedDataList
-            )
-        )
-
-        imageUrl = "https://www.edamam.com/food-img/515/515af390107678fce1533a31ee4cc35b.jpeg"
-        address = "test2address"
-        name = "test2name"
-        phonenumber = "test2phonenumber"
-        nestedDataList = mutableListOf(NestedData(imageUrl))
-
-        msglist.add(
-            data(
-                formatted_address = address,
-                name = name,
-                formatted_phone_number = phonenumber,
-                photoList = nestedDataList
-            )
-        )
-        imageUrl = "https://www.edamam.com/food-img/42c/42c006401027d35add93113548eeaae6.jpg"
-        address = "test3address"
-        name = "test3name"
-        phonenumber = "test3phonenumber"
-        nestedDataList = mutableListOf(NestedData(imageUrl))
-
-        msglist.add(
-            data(
-                formatted_address = address,
-                name = name,
-                formatted_phone_number = phonenumber,
-                photoList = nestedDataList
-            )
-        )
-
-
-        Log.d("msg", "msglist: $msglist")
+            Apiclient.googlePlaces.getPlaceSearch(
+                location = "$DEFAULT_LATITUDE,$DEFAULT_LONGITUDE",
+                radius = "500",
+                language = "zh-TW",
+                keyword = search,
+                key = BuildConfig.GOOGLE_API_KEY
+            ).enqueue(object : Callback<PlacesSearch> {
+                override fun onResponse(
+                    call: Call<PlacesSearch>,
+                    response: Response<PlacesSearch>
+                ) {
+                    response.body()?.let { res ->
+                            res.results.forEach { result ->
+                                placeid = result.place_id
+                                name = result.name
+                                placeidArray.add(placeid)
+                                result.photos.forEach { photo ->
+                                    photorefArray.add(photo.photo_reference)
+                                }
+                            }
+                    }
+                    for(i in 0 .. photorefArray.size - 1)
+                    {
+                        photoref = photorefArray[i]
+                        image ="https://maps.googleapis.com/maps/api/place/photo" +
+                                "?maxwidth=300" +
+                                "&maxheight=200" +
+                                "&photo_reference=" + photoref +
+                                "&key=" + BuildConfig.GOOGLE_API_KEY
+                        nestedDataList.add(NestedData(image))
+                    }
+                    for(i in 0 .. placeidArray.size - 1)
+                    {
+                        placeid = placeidArray[i]
+                        image = nestedDataList[i].imageUrl
+                        DetailSearch(placeid, image)
+                    }
+                }
+                override fun onFailure(
+                    call: Call<PlacesSearch>,
+                    t: Throwable
+                ) {
+                    t.printStackTrace()
+                    Method.logE(TAG, "onFailure: ${t.message}")
+                }
+            })
+        }
+    }
+    private fun DetailSearch(placeid :String,image:String){
+        Apiclient.googlePlaces.getPlaceDetails(
+            placeID = placeid,
+            language = "zh-TW",
+            key = BuildConfig.GOOGLE_API_KEY
+        ).enqueue(object : Callback<PlacesDetails> {
+            override fun onResponse(
+                call: Call<PlacesDetails>,
+                response: Response<PlacesDetails>
+            ) {
+                    response.body()?.let { res ->
+                            address= res.result.formatted_address ?: ""
+                            name = res.result.name ?: ""
+                            phonenumber = res.result.formatted_phone_number ?: ""
+                    }
+                rv(image)
+            }
+            override fun onFailure(
+                call: Call<PlacesDetails>,
+                t: Throwable
+            ) {
+                t.printStackTrace()
+                Method.logE(TAG, "onFailure: ${t.message}")
+            }
+        })
+    }
+    private fun rv(image: String) {
+        msglist.add(data(
+            formatted_address = address,
+            name = name,
+            formatted_phone_number = phonenumber,
+            image = image
+            ))
+//        Log.d("msg", "msglist: $msglist\n")
+//        Log.d("nestedDataList", "nestedDataList: $nestedDataList\n")
+//        Log.d("photorefArray", "photorefArray: $photorefArray\n")
+//        Log.d("image", "image: $image\n")
         RAdapter.notifyDataSetChanged()
 
 
     }
 
-
 }
+
+//TODO rv image 統一圖片大小
