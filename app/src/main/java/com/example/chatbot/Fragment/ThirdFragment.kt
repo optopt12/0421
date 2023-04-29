@@ -129,13 +129,13 @@ class ThirdFragment : Fragment() {
                     for (i in 0..photorefArray.size - 1) {
                         photoref = photorefArray[i]
                         image = "https://maps.googleapis.com/maps/api/place/photo" +
-                                "?maxwidth=300" +
-                                "&maxheight=200" +
+                                "?maxwidth=4000" +
+                                "&maxheight=4000" +
                                 "&photo_reference=" + photoref +
                                 "&key=" + BuildConfig.GOOGLE_API_KEY
-                        var newimage = testuniformimage(image)
-//                        nestedDataList.add(NestedData(image))
-                        nestedDataList.add(NestedData(newimage))
+//                        var newimage = testuniformimage(image)
+                        nestedDataList.add(NestedData(image))
+//                        nestedDataList.add(NestedData(newimage))
 
                     }
                     for (i in 0..placeidArray.size - 1) {

@@ -3,6 +3,7 @@ package com.example.chatbot.Adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.PagerAdapter
@@ -33,6 +34,10 @@ class RestaurantListAdapter(var MsgList: MutableList<data>) :
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val data = MsgList[position]
+
+//        holder.binding.imageView.setScaleType(ImageView.ScaleType.FIT_XY)
+        holder.binding.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP)
+
 
         holder.binding.Address.text = data.formatted_address
         holder.binding.Shopname.text = data.name

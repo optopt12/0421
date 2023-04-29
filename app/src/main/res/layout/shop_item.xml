@@ -10,9 +10,11 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="300dp"
+        android:layout_width="405dp"
         android:layout_height="200dp"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        app:srcCompat="@drawable/ic_launcher_background"
+        android:scaleType="centerCrop"
+        />
 
     <TextView
         android:id="@+id/Shopname"
