@@ -27,8 +27,8 @@ class NestedImagePagerAdpter(
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.binding.imgNested.getController().enableScrollInViewPager(viewPager)
-        settingsController.apply(holder.binding.imgNested)
+//        holder.binding.imgNested.getController().enableScrollInViewPager(viewPager)
+//        settingsController.apply(holder.binding.imgNested)
 
     }
 

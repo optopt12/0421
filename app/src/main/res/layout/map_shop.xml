@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/map_shop_fragment"
     tools:context=".Activity.MainActivity">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv"
+            android:id="@+id/shoprv"
             android:layout_width="match_parent"
             android:layout_height="700dp"
             android:layout_weight="1"
