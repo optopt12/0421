@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatbot.Adapter.NestedData
+import com.example.chatbot.Adapter.NestedImageAdapter
 import com.example.chatbot.Adapter.RestaurantDetailAdapter
 import com.example.chatbot.Adapter.RestaurantListAdapter
 import com.example.chatbot.BuildConfig
@@ -29,6 +30,7 @@ class RestaurantDetailFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var RAdapter: RestaurantDetailAdapter
+    private lateinit var NAdapter: NestedImageAdapter
 
     private var Detailmsglist: MutableList<data> = ArrayList()//建立可改變的list
     companion object {
@@ -44,6 +46,8 @@ class RestaurantDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             data = it.getParcelable("Data")
+            Detailmsglist.add(data!!)
+
 
         }
     }
@@ -67,6 +71,9 @@ class RestaurantDetailFragment : Fragment() {
         initRv() //RecyclerView初始化
         Toast.makeText(requireContext(), "${data?.name}1234tees", Toast.LENGTH_SHORT).show()
 
+        RAdapter.notifyDataSetChanged()
+        NAdapter.notifyDataSetChanged()
+
     }
 
     private fun initRv() {
@@ -79,7 +86,15 @@ class RestaurantDetailFragment : Fragment() {
             )  //布局为线性垂直
             adapter = RAdapter
         }
-
+        binding.DetailrvH.apply {
+            NAdapter = NestedImageAdapter(Detailmsglist[0].photoList)//建立适配器实例
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )  //布局为线性垂直
+            adapter = NAdapter
+        }
     }
 //    private fun rv(image: String) {
 //        msglist.add(
