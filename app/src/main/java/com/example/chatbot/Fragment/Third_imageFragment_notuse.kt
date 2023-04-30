@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.chatbot.databinding.FragmentThirdImageBinding
-import com.example.chatbot.databinding.MapShopBinding
 
 private var _binding: FragmentThirdImageBinding? = null
 private val binding get() = _binding!!
@@ -15,7 +14,7 @@ private val binding get() = _binding!!
 private lateinit var photoUrl: String
 
 // TODO: use navigate instead of intent
-class Third_imageFragment : Fragment() {
+class Third_imageFragment_notuse : Fragment() {
 
     companion object {
         const val ARG_PHOTO_URL = "arg_photo_url"

@@ -1,20 +1,14 @@
 package com.example.chatbot.Adapter
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chatbot.Fragment.ThirdFragment
-import com.example.chatbot.Fragment.Third_imageFragment
+import com.example.chatbot.Fragment.Third_imageFragment_notuse
 import com.example.chatbot.R
 import com.example.chatbot.databinding.ShopItemNestedBinding
-import com.example.chatbot.placesDetails.data
 import com.squareup.picasso.Picasso
 
 class NestedImageAdapter(var photoList: List<NestedData>) :  //只需要MsgList的imgUrl
@@ -40,7 +34,7 @@ class NestedImageAdapter(var photoList: List<NestedData>) :  //只需要MsgList�
             bundle.putString("data_key", "要傳遞的資料")
 
             // 建立目標 fragment
-            val targetFragment = Third_imageFragment()
+            val targetFragment = Third_imageFragment_notuse()
             targetFragment.arguments = bundle
 
             // 取得 FragmentManager 和 FragmentTransaction

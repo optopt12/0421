@@ -65,7 +65,7 @@ class RestaurantDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRv() //RecyclerView初始化
-        Toast.makeText(requireContext(), data?.name, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "${data?.name}1234tees", Toast.LENGTH_SHORT).show()
 
     }
 
@@ -79,6 +79,7 @@ class RestaurantDetailFragment : Fragment() {
             )  //布局为线性垂直
             adapter = RAdapter
         }
+
     }
 //    private fun rv(image: String) {
 //        msglist.add(
