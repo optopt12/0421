@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatbot.Adapter.NestedData
+import com.example.chatbot.Adapter.RestaurantDetailAdapter
 import com.example.chatbot.Adapter.RestaurantListAdapter
 import com.example.chatbot.BuildConfig
 import com.example.chatbot.Method
@@ -21,10 +22,15 @@ import com.example.chatbot.placesSearch.PlacesSearch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-private var _binding: ShopDetailBinding? = null
-private val binding get() = _binding!!
+
 
 class RestaurantDetailFragment : Fragment() {
+    private var _binding: ShopDetailBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var RAdapter: RestaurantDetailAdapter
+
+    private var Detailmsglist: MutableList<data> = ArrayList()//建立可改變的list
     companion object {
         private const val TAG = "RestaurantDetailFragment"
         private const val DEFAULT_ZOOM = 18F
@@ -38,6 +44,7 @@ class RestaurantDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             data = it.getParcelable("Data")
+
         }
     }
 
@@ -57,21 +64,22 @@ class RestaurantDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        initRv() //RecyclerView初始化
+        initRv() //RecyclerView初始化
         Toast.makeText(requireContext(), data?.name, Toast.LENGTH_SHORT).show()
+
     }
 
-//    private fun initRv() {
-//        binding.rv.apply {
-//            RAdapter = RestaurantListAdapter(msglist)//建立适配器实例
-//            layoutManager = LinearLayoutManager(
-//                requireContext(),
-//                LinearLayoutManager.VERTICAL,
-//                false
-//            )  //布局为线性垂直
-//            adapter = RAdapter
-//        }
-//    }
+    private fun initRv() {
+        binding.DetailrvS.apply {
+            RAdapter = RestaurantDetailAdapter(Detailmsglist)//建立适配器实例
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false
+            )  //布局为线性垂直
+            adapter = RAdapter
+        }
+    }
 //    private fun rv(image: String) {
 //        msglist.add(
 //            data(

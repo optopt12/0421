@@ -10,18 +10,16 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/Detailrv"
+            android:id="@+id/Detailrv_h"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:background="@color/quantum_grey200"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Detailrv_s"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabIndicatorColor ="@color/white"
-            app:tabIndicatorHeight="3dp" />
+            android:layout_height="match_parent" />
 
 </LinearLayout>

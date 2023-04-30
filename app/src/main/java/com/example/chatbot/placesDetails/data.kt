@@ -8,11 +8,17 @@ import retrofit2.http.Url
 
 @Parcelize
 data class data(
-//    val photoList: List<NestedData>,
-    var image: String = "",
-    var formatted_address: String = "---",
-    var name: String = "not found",
-    var formatted_phone_number: String = "---"
+    val photoList: List<String>,
+    val image: String,
+    val formatted_address: String,
+    val name: String,
+    val formatted_phone_number: String,
+    val reference: String,
+    val author_name: String,
+    val language: String,
+    val rating: Int,
+    val text: String,
+    val profile_photo_url: String
 ) : Parcelable
 
 
