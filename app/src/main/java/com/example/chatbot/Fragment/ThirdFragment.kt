@@ -1,6 +1,7 @@
 package com.example.chatbot.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -87,19 +88,19 @@ class ThirdFragment : Fragment() {
 
     private fun initRv() {
         binding.rv.apply {
-            RAdapter = RestaurantListAdapter(msglist)
+            RAdapter = RestaurantListAdapter(msglist)//建立适配器实例
             layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.VERTICAL,
                 false
-            )
+            )  //布局为线性垂直
             adapter = RAdapter
             RAdapter.onClick = { data ->
                 val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
                 val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
 
                 val b = Bundle()
-                b.putParcelable("Data", data)
+                b.putParcelable("ThirdtoRdetail", data)
 
                 val fragment = RestaurantDetailFragment()
                 fragment.arguments = b
@@ -111,7 +112,7 @@ class ThirdFragment : Fragment() {
     }
     private fun SearchShop() {
         val search = binding.editText.text.toString()
-        binding.button.setOnClickListener()
+        binding.button.setOnClickListener() //TODO DetailSearch只在這裡做一次，photolist不會有變化
         {
 
             Apiclient.googlePlaces.getPlaceSearch(
@@ -138,9 +139,9 @@ class ThirdFragment : Fragment() {
                     for(i in 0 .. photorefArray.size - 1)
                     {
                         photoref = photorefArray[i]
-                        image ="https://maps.googleapis.com/maps/api/place/photo" +
-                                "?maxwidth=300" +
-                                "&maxheight=200" +
+                        image = "https://maps.googleapis.com/maps/api/place/photo" +
+                                "?maxwidth=4000" +
+                                "&maxheight=4000" +
                                 "&photo_reference=" + photoref +
                                 "&key=" + BuildConfig.GOOGLE_API_KEY
                         nestedDataList.add(NestedData(image))
@@ -199,6 +200,7 @@ class ThirdFragment : Fragment() {
                             "&key=" + BuildConfig.GOOGLE_API_KEY
                     photoList.add(Detailimage)
                 }
+                Log.d("DetailimagephotoList", "photoList: $photoList\n")
                 rv(image)
             }
             override fun onFailure(
