@@ -1,28 +1,20 @@
 package com.example.chatbot.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.chatbot.Adapter.NestedData
 import com.example.chatbot.Adapter.NestedImageAdapter
 import com.example.chatbot.Adapter.RestaurantDetailAdapter
-import com.example.chatbot.Adapter.RestaurantListAdapter
-import com.example.chatbot.BuildConfig
-import com.example.chatbot.Method
-import com.example.chatbot.Network.Apiclient
-import com.example.chatbot.databinding.MapShopBinding
+import com.example.chatbot.R
 import com.example.chatbot.databinding.ShopDetailBinding
-import com.example.chatbot.placesDetails.PlacesDetails
 import com.example.chatbot.placesDetails.data
-import com.example.chatbot.placesSearch.PlacesSearch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 class RestaurantDetailFragment : Fragment() {
@@ -40,14 +32,16 @@ class RestaurantDetailFragment : Fragment() {
         private const val DEFAULT_LONGITUDE = 121.53453374432904
     }
 
-    private var data: data? = null
+    private var receivedData: data? = null
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        Detailmsglist.clear()
         arguments?.let {
-            data = it.getParcelable("Data")
-            Detailmsglist.add(data!!)
-
+            receivedData = it.getParcelable("ThirdtoRdetail")
+            Detailmsglist.add(receivedData!!)
 
         }
     }
@@ -69,10 +63,15 @@ class RestaurantDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRv() //RecyclerView初始化
-        Toast.makeText(requireContext(), "${data?.name}1234tees", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "${receivedData?.name}", Toast.LENGTH_SHORT).show()
 
         RAdapter.notifyDataSetChanged()
         NAdapter.notifyDataSetChanged()
+        Log.d("Detailmsglist", Detailmsglist.toString() )
+
+
+
+
 
     }
 
@@ -88,14 +87,35 @@ class RestaurantDetailFragment : Fragment() {
         }
         binding.DetailrvH.apply {
             NAdapter = NestedImageAdapter(Detailmsglist[0].photoList)//建立适配器实例
+//            NAdapter = NestedImageAdapter(Detailmsglist)//建立适配器实例
             layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.HORIZONTAL,
                 false
             )  //布局为线性垂直
             adapter = NAdapter
+
+            NAdapter.onClick = { data ->
+                val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+                val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+
+                val b = Bundle()
+                b.putString("RDetailtoImage", data)
+
+                val fragment = ImageDetailFragment()
+                fragment.arguments = b
+                fragmentTransaction.add(R.id.container, fragment, fragment.javaClass.name)
+
+                fragmentTransaction.addToBackStack(fragment.javaClass.name)
+                fragmentTransaction.commit()
+            }
+
+
         }
     }
+
+
+
 //    private fun rv(image: String) {
 //        msglist.add(
 //            data(

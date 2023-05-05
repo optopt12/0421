@@ -9,15 +9,17 @@ import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.example.chatbot.R
 import com.example.chatbot.databinding.ShopItemNestedBinding
+import com.example.chatbot.databinding.ShopItemScrollBinding
+import com.example.chatbot.databinding.ShopItemScrollItemBinding
 
-class ImageDetailAdapter(private val imagesList: List<NestedData>) : RecyclerView.Adapter<ImageDetailAdapter.ImageViewHolder>() {
+class ImageDetailAdapter(private val imagesList: List<String>) : RecyclerView.Adapter<ImageDetailAdapter.ImageViewHolder>() {
 
-    inner class ImageViewHolder(val binding: ShopItemNestedBinding) :
+    inner class ImageViewHolder(val binding: ShopItemScrollItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
 //        val view = LayoutInflater.from(parent.context).inflate(R.layout.item, parent, false)
-        val view = ShopItemNestedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view = ShopItemScrollItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return ImageViewHolder(view)
     }
@@ -27,7 +29,7 @@ class ImageDetailAdapter(private val imagesList: List<NestedData>) : RecyclerVie
 
         Glide.with(holder.itemView)
             .load(imagesList[position])
-            .into(holder.binding.imgNested)
+            .into(holder.binding.img)
 //        Picasso.get().load(images[position]).into(holder.imageView)
 
 
